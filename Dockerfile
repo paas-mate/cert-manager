@@ -1,10 +1,10 @@
-FROM shoothzj/base:go AS build
+FROM shoothzj/compile:go
 ENV CERT_MANAGER_HOME=/opt/cert-manager
 WORKDIR /opt/cert-manager
 RUN mkdir /opt/compile && \
-    mkdir /opt/cert-manager && \
     cd /opt/compile && \
     git clone https://github.com/cert-manager/cert-manager.git -b v1.12.2 --depth=1 && \
+    cd cert-manager && \
     go mod tidy && \
     cd /opt/compile/cert-manager/cmd/webhook && \
     go mod tidy && \
@@ -25,4 +25,4 @@ RUN mkdir /opt/compile && \
 
 COPY docker-build /opt/cert-manager/mate
 
-CMD ["/usr/bin/dumb-init", "bash", "-vx", "/opt/kafka/mate/scripts/start.sh"]
+CMD ["/usr/bin/dumb-init", "bash", "-vx", "/opt/cert-manager/mate/scripts/start.sh"]
